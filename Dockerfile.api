@@ -1,0 +1,22 @@
+FROM whisperx:large-v2-en-zh
+
+# Set UID as build argument with default value
+ARG UID=1001
+USER root
+
+# Install Python dependencies using apt
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-fastapi \
+    python3-uvicorn \
+    python3-multipart
+
+# Copy the API code
+COPY app.py /app/app.py
+RUN chmod 775 /app/app.py
+
+# Expose the API port
+EXPOSE 8000
+
+# Set the entrypoint to run the FastAPI server
+ENV PATH="/venv/bin:${PATH}"
+ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
