@@ -18,7 +18,7 @@ def read_root():
 async def transcribe_audio(
     file: UploadFile = File(...),
     model_name: str = Form("large-v2"),
-    language: Optional[str] = Form(None),
+    language: Optional[str] = Form("en"),
     batch_size: int = Form(16),
     compute_type: str = Form("float16"),
     output_format: Optional[str] = Form("json"),
@@ -59,7 +59,7 @@ async def transcribe_audio(
         
         # 3. Assign speaker labels if diarization is requested
         if diarize:
-            diarize_model = whisperx.DiarizationPipeline(use_auth_token=None, device=device)
+            diarize_model = whisperx.DiarizationPipeline(use_auth_token="", device=device)
             diarize_segments = diarize_model(
                 audio, 
                 min_speakers=min_speakers, 
